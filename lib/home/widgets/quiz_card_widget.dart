@@ -1,10 +1,17 @@
 import 'package:dev_quiz/core/app_colors.dart';
 import 'package:dev_quiz/core/app_images.dart';
 import 'package:dev_quiz/core/app_text_styles.dart';
+import 'package:dev_quiz/shared/models/quiz_model.dart';
 import 'package:dev_quiz/shared/widgets/progress_indicator_widget.dart';
 import 'package:flutter/material.dart';
 
 class QuizCardWidget extends StatelessWidget {
+  final QuizModel quiz;
+  final double percent;
+
+  QuizCardWidget({required this.quiz})
+      : this.percent = quiz.questionsAnswered / quiz.questions.length;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,22 +26,25 @@ class QuizCardWidget extends StatelessWidget {
           Container(
             width: 40,
             height: 40,
-            child: Image.asset(AppImages.blocks),
+            child: Image.asset(quiz.logo),
           ),
           SizedBox(height: 24),
           Text(
-            'Gerenciamento de estado',
+            quiz.title,
             style: AppTextStyles.heading15,
           ),
           SizedBox(height: 24),
           Row(
             children: [
               Expanded(
-                  flex: 1, child: Text('3 de 10', style: AppTextStyles.body11)),
+                  flex: 1,
+                  child: Text(
+                      '${quiz.questionsAnswered} de ${quiz.questions.length}',
+                      style: AppTextStyles.body11)),
               Expanded(
                   flex: 2,
                   child: ProgressIndicatorWidget(
-                    value: .3,
+                    value: percent,
                   ))
             ],
           )

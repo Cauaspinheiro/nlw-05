@@ -1,4 +1,6 @@
 import 'package:dev_quiz/core/app_colors.dart';
+import 'package:dev_quiz/home/home_controller.dart';
+import 'package:dev_quiz/home/home_state.dart';
 import 'package:dev_quiz/home/widgets/app_bar_widget.dart';
 import 'package:dev_quiz/home/widgets/level_button/level_button_styles.dart';
 import 'package:dev_quiz/home/widgets/level_button/level_button_widget.dart';
@@ -11,10 +13,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final controller = HomeController();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.getQuizzes();
+    controller.getUser();
+
+    controller.stateNotifier.addListener(() {
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (controller.state == HomeState.loading)
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+
     return Scaffold(
-      appBar: AppBarWidget(),
+      appBar: AppBarWidget(user: controller.user!),
       body: Container(
         padding: EdgeInsets.only(top: 28, left: 20, right: 20),
         child: Column(
@@ -54,20 +72,15 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 24),
             Expanded(
-                child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              children: [
-                QuizCardWidget(),
-                QuizCardWidget(),
-                QuizCardWidget(),
-                QuizCardWidget(),
-                QuizCardWidget(),
-                QuizCardWidget(),
-                QuizCardWidget(),
-              ],
-            ))
+              child: GridView.count(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                children: controller.quizzes!
+                    .map((e) => QuizCardWidget(quiz: e))
+                    .toList(),
+              ),
+            )
           ],
         ),
       ),
