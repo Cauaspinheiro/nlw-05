@@ -1,4 +1,5 @@
 import 'package:dev_quiz/core/app_images.dart';
+import 'package:dev_quiz/home/home_repository.dart';
 import 'package:dev_quiz/home/home_state.dart';
 import 'package:dev_quiz/shared/models/answer_model.dart';
 import 'package:dev_quiz/shared/models/question_model.dart';
@@ -15,15 +16,12 @@ class HomeController {
   UserModel? user;
   List<QuizModel>? quizzes;
 
+  final repository = HomeRepository();
+
   void getUser() async {
     state = HomeState.loading;
 
-    await Future.delayed(Duration(seconds: 2));
-
-    user = UserModel(
-      name: 'Caua',
-      photoUrl: 'https://avatars.githubusercontent.com/u/56241309?s=60&v=4',
-    );
+    user = await repository.getUser();
 
     state = HomeState.success;
   }
@@ -31,35 +29,7 @@ class HomeController {
   void getQuizzes() async {
     state = HomeState.loading;
 
-    await Future.delayed(Duration(seconds: 2));
-
-    quizzes = [
-      QuizModel(
-          title: 'Question 1',
-          questionsAnswered: 2,
-          questions: [
-            QuestionModel(title: 'Question', answers: [
-              AnswerModel(title: 'A'),
-              AnswerModel(title: 'B', isRight: true),
-              AnswerModel(title: 'C'),
-              AnswerModel(title: 'D'),
-            ]),
-            QuestionModel(title: 'Question', answers: [
-              AnswerModel(title: 'A'),
-              AnswerModel(title: 'B', isRight: true),
-              AnswerModel(title: 'C'),
-              AnswerModel(title: 'D'),
-            ]),
-            QuestionModel(title: 'Question', answers: [
-              AnswerModel(title: 'A'),
-              AnswerModel(title: 'B', isRight: true),
-              AnswerModel(title: 'C'),
-              AnswerModel(title: 'D'),
-            ]),
-          ],
-          logo: AppImages.blocks,
-          level: Level.easy),
-    ];
+    quizzes = await repository.getQuizzes();
 
     state = HomeState.success;
   }
