@@ -32,7 +32,7 @@ class NextButtonWidget extends StatelessWidget {
     return Container(
       height: 48,
       child: TextButton(
-        onPressed: () {},
+        onPressed: onTap,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(backgroundColor),
           shape: MaterialStateProperty.all(
