@@ -2,13 +2,16 @@ import 'package:dev_quiz/challenge/challenge_controller.dart';
 import 'package:dev_quiz/challenge/widgets/question_indicator_widget.dart';
 import 'package:dev_quiz/challenge/widgets/quiz_widget.dart';
 import 'package:dev_quiz/home/widgets/next_button_widget.dart';
+import 'package:dev_quiz/result/result_page.dart';
 import 'package:dev_quiz/shared/models/question_model.dart';
 import 'package:flutter/material.dart';
 
 class ChallengePage extends StatefulWidget {
   final List<QuestionModel> questions;
+  final String title;
 
-  const ChallengePage({Key? key, required this.questions}) : super(key: key);
+  const ChallengePage({Key? key, required this.questions, required this.title})
+      : super(key: key);
 
   @override
   _ChallengePageState createState() => _ChallengePageState();
@@ -32,6 +35,14 @@ class _ChallengePageState extends State<ChallengePage> {
         duration: Duration(milliseconds: 400),
         curve: Curves.easeInOut,
       );
+  }
+
+  void onSelected(bool value) {
+    if (value) {
+      controller.questionsRight++;
+    }
+
+    nextPage();
   }
 
   @override
@@ -64,7 +75,7 @@ class _ChallengePageState extends State<ChallengePage> {
                     const EdgeInsets.only(left: 20.0, right: 20.0, top: 48),
                 child: QuizWidget(
                   question: e,
-                  onFinish: nextPage,
+                  onSelected: onSelected,
                 ),
               ),
             )
@@ -89,8 +100,17 @@ class _ChallengePageState extends State<ChallengePage> {
                 else
                   Expanded(
                     child: NextButtonWidget.primary(
-                      label: 'Acabou',
-                      onTap: () => Navigator.pop(context),
+                      label: 'Resultados',
+                      onTap: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResultPage(
+                            title: widget.title,
+                            length: widget.questions.length,
+                            result: controller.questionsRight,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
               ],
