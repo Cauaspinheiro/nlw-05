@@ -1,9 +1,14 @@
 import 'package:dev_quiz/core/app_colors.dart';
 import 'package:dev_quiz/core/app_text_styles.dart';
 import 'package:dev_quiz/home/widgets/chart_widget.dart';
+import 'package:dev_quiz/shared/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class ScoreCardWidget extends StatelessWidget {
+  final UserModel user;
+
+  const ScoreCardWidget({Key? key, required this.user}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +21,12 @@ class ScoreCardWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(flex: 1, child: ChartWidget()),
+              Expanded(
+                flex: 1,
+                child: ChartWidget(
+                  percent: user.score / 100,
+                ),
+              ),
               Expanded(
                 flex: 3,
                 child: Padding(
