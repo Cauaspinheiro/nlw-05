@@ -1,7 +1,6 @@
-<h1 align="center">
-  <img alt="DevQuiz" title="DevQuiz" src=".github/logo.png" />
-</h1>
-
+<p align="center">
+  <img alt="DevQuiz" src=".github/devquiz.png" width="100%">
+</p>
 
 ## ✨ Tecnologias
 
